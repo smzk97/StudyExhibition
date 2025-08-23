@@ -1,0 +1,160 @@
+ {# 首页 #}
+{% extends 'base.html' %}
+
+{# 命名标题 #}
+{% block title %}
+    <title>首页</title>
+{% endblock %}
+
+{# 自定义头部内容 #}
+{% block head %}
+
+    {# 导航条 #}
+    <nav class="navbar navbar-expand-lg  navbar-dark bg-primary">
+
+        <a class="navbar-brand" href="/home/">
+            书籍网站
+        </a>
+
+        {# .navbar-toggler 用于配合我们的折叠插件和其他 导航切换 行为 #}
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/home/">首页<span class="sr-only">(current)</span></a>
+                </li>
+            </ul>
+
+            <li class="nav-item dropdown" style="list-style: none">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false" style="color: white">
+                    筛选
+                </a>
+
+
+                <div class="dropdown-menu">
+                    {% for book in tip %}
+                    <a class="dropdown-item" href="/tips/?tip={{ book.name }}">
+                        {{ book.name }}
+                    </a>
+                {% endfor %}
+                </div>
+            </li>
+
+            <form class="form-inline my-2 my-lg-0 " action="/search/" method="get">
+                    <input class="form-control mr-sm-2" type="search" placeholder="请输入书籍名称" aria-label="Search" name="search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit" style="color: white;border-color:white;">
+                        搜索
+                    </button>
+            </form>
+        </div>
+    </nav>
+
+{% endblock %}
+
+{# 自定义核心内容 #}
+{% block content %}
+    <div style="height: 1900px;width: 100%;background-color: #ECECEC;margin: 0 auto">
+
+        {# 书籍列表 #}
+        <div style="overflow: hidden">
+            <div class="bg-white" style="width: 1100px;height: 1150px;margin: 0 auto;margin-top: 15px">
+                
+                {% if data.items %}
+
+                    {# 文字 #}
+                    <div style="overflow: hidden">
+                        <h4 style="margin-left: 15px;margin-top: 20px">
+                            <b>书籍列表</b>
+                        </h4>
+                    </div>
+
+                    {# 列表 #}
+                    <div style="overflow: hidden">
+                        <div style="width: 900px;height: 1000px;margin: 0 auto;margin-top: 20px">
+
+                            <div class="row row-cols-1 row-cols-md-3">
+
+                                {% for book in data.items %}
+
+                                    <div class="col mb-4">
+                                        <div class="card">
+                                            <img src="{{ url_for('static',filename=book.cover_image_page) }}" class="card-img-top" alt="...">
+                                            <div class="card-body">
+
+                                                <h5 class="card-title">{{ book.title }}</h5>
+
+                                                <p>作者：{{ book.author }}</p>
+
+                                                <p>出版社：{{ book.publisher }}</p>
+
+                                                <p>ISBN：{{ book.isbn }}</p>
+
+                                                <p>标签：
+                                                    <a href="/tips/?tip={{ book.tip }}" class="badge badge-info">{{ book.tip }}</a>
+                                                </p>
+
+                                                <a href="/books/?title={{ book.title }}" class="btn btn-primary">查看详情</a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+                    {# 分页 #}
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-center">
+
+                            {% if data.has_prev %}
+                                <li class="page-item">
+                                    <a class="page-link" href="/home/?page={{ data.page - 1 }}&tip={{ data.items[0].tip }}">上一页</a>
+                                </li>
+                            {% else %}
+                                <li class="page-item">
+                                    <a class="page-link" href="#">上一页</a>
+                                </li>
+                            {% endif %}
+
+                            {% for index in range(data.pages) %}
+                                {% if index + 1 == data.page %}
+                                    <li class="page-item active"><a class="page-link" href="/home/?page={{ index + 1 }}">{{ index + 1 }}</a></li>
+                                {% else %}
+                                    <li class="page-item"><a class="page-link" href="/home/?page={{ index + 1 }}">{{ index + 1 }}</a></li>
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if data.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="/home/?page={{ data.page + 1 }}&tip={{ data.items[0].tip }}">下一页</a>
+                                </li>
+                            {% else %}
+                                <li class="page-item">
+                                    <a class="page-link" href="#">下一页</a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+
+                {% else %}
+                     <p style="display: inline-block;font-size: 1.5rem;margin-top: 15px;margin-left: 15px">
+                        未找到包含“<span style="display: inline-block;font-size: 1.5rem;font-weight: bold;margin-top: 15px;margin-left: 15px">
+                            {{ data_search }}
+                        </span>
+                         ”的书籍
+                     </p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{# 自定义尾部内容 #}
+{% block foot %}
+
+{% endblock %}

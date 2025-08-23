@@ -1,0 +1,303 @@
+{# 首页 #}
+{% extends 'base.html' %}
+
+{# 命名标题 #}
+{% block title %}
+    <title>首页</title>
+{% endblock %}
+
+{# 自定义头部内容 #}
+{% block head %}
+
+    {# 导航条 #}
+    <nav class="navbar navbar-expand-lg  navbar-dark bg-primary">
+
+        <a class="navbar-brand" href="/home/">
+            书籍网站
+        </a>
+
+        {# .navbar-toggler 用于配合我们的折叠插件和其他 导航切换 行为 #}
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/home/">首页<span class="sr-only">(current)</span></a>
+                </li>
+            </ul>
+
+            <li class="nav-item dropdown" style="list-style: none">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false" style="color: white">
+                    筛选
+                </a>
+
+
+                <div class="dropdown-menu">
+                    {% for book in tip %}
+                    <a class="dropdown-item" href="/tips/?tip={{ book.name }}">
+                        {{ book.name }}
+                    </a>
+                {% endfor %}
+                </div>
+            </li>
+
+            {# 提交表单到设定的url，提交的数据附加到url后面 #}
+            <form class="form-inline my-2 my-lg-0" action="/search/" method="get">
+                    <input class="form-control mr-sm-2" type="search" placeholder="请输入书籍名称" aria-label="Search" name="search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit" style="color: white;border-color:white;">
+                        搜索
+                    </button>
+            </form>
+        </div>
+    </nav>
+
+{% endblock %}
+
+{# 自定义核心内容 #}
+{% block content %}
+    <div style="height: 1900px;width: 100%;background-color: #ECECEC;margin: 0 auto">
+
+        {# 轮播图加日历 #}  {# 包裹子元素的margin #}
+<div style="overflow: hidden">
+    <div class="bg-white" style="width: 1100px;height: 375px;margin: 0 auto;margin-top: 15px">
+        {# 包裹子元素的margin #}
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 30px;">
+
+            {# 左侧校训 #}
+            <div style="display: flex; margin-right: 20px;">
+                {# 厚德博学 #}
+                <div style="writing-mode: vertical-rl; text-orientation: upright; font-family: 'KaiTi', '楷体', serif; font-size: 28px; font-weight: bold; color: #8B0000; margin-right: 15px; letter-spacing: 8px; text-shadow: 1px 1px 3px rgba(0,0,0,0.2);">
+                    厚德博学
+                </div>
+
+                {# 唯实求新 #}
+                <div style="writing-mode: vertical-rl; text-orientation: upright; font-family: 'KaiTi', '楷体', serif; font-size: 28px; font-weight: bold; color: #8B0000; letter-spacing: 8px; text-shadow: 1px 1px 3px rgba(0,0,0,0.4);">
+                    唯实求新
+                </div>
+            </div>
+
+            {# 轮播图 #}
+            <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" style="width: 500px;height: 315px;">
+                {# 指示器 #}
+                <ol class="carousel-indicators">
+                    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                </ol>
+
+                {# 轮播图片 #}
+                <div class="carousel-inner" style="width: 100%;height: auto;">
+                    <div class="carousel-item active" style="width: 100%;height: auto;">
+                        <img src="{{ url_for('static',filename='img/石碑.jpg') }}" class="d-block w-100" alt="...">
+                    </div>
+
+                    <div class="carousel-item" style="width: 100%;height: auto;">
+                      <img src="{{ url_for('static',filename='img/东校区大门.jpg') }}" class="d-block w-100" alt="...">
+                    </div>
+
+                    <div class="carousel-item" style="width: 100%;height: auto;">
+                      <img src="{{ url_for('static',filename='img/河源校区.jpg') }}" class="d-block w-100" alt="...">
+                    </div>
+                </div>
+
+                {# 左按钮 #}
+                <button class="carousel-control-prev" type="button" data-target="#carouselExampleIndicators" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </button>
+
+                {# 右按钮 #}
+                <button class="carousel-control-next" type="button" data-target="#carouselExampleIndicators" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </button>
+            </div>
+
+            {# 右侧日历 #}
+            <div class="calendar-container" style="width: 250px; border: 1px solid #ddd; border-radius: 5px; box-shadow: 0 0 10px rgba(0,0,0,0.1); background-color: #fff;">
+                <div style="background-color: #4b70e2; color: white; text-align: center; padding: 10px; font-weight: bold; border-top-left-radius: 5px; border-top-right-radius: 5px;">
+                    <span id="current-month-year">2023年12月</span>
+                </div>
+                <div style="padding: 10px;">
+                    <table style="width: 100%; text-align: center;">
+                        <thead>
+                            <tr>
+                                <th style="color: #e74c3c;">日</th>
+                                <th>一</th>
+                                <th>二</th>
+                                <th>三</th>
+                                <th>四</th>
+                                <th>五</th>
+                                <th style="color: #e74c3c;">六</th>
+                            </tr>
+                        </thead>
+                        <tbody id="calendar-body">
+                            <!-- 日历内容将通过JavaScript动态生成 -->
+                        </tbody>
+                    </table>
+                </div>
+                <div style="text-align: center; padding: 10px; border-top: 1px solid #eee;">
+                    <span id="current-date" style="font-weight: bold;">今日: </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{# 添加日历JavaScript代码 #}
+{% block extjs %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 获取当前日期
+        const today = new Date();
+        const currentDay = today.getDate();
+        const currentMonth = today.getMonth();
+        const currentYear = today.getFullYear();
+
+        // 设置月份和年份显示
+        document.getElementById('current-month-year').textContent = `${currentYear}年${currentMonth + 1}月`;
+
+        // 设置今日日期
+        document.getElementById('current-date').textContent = `今日: ${currentYear}年${currentMonth + 1}月${currentDay}日`;
+
+        // 获取当月第一天是星期几
+        const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+
+        // 获取当月天数
+        const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+        // 生成日历
+        let calendarHTML = '';
+        let dayCount = 1;
+
+        // 创建日历行
+        for (let i = 0; i < 6; i++) {
+            // 如果已经超过了当月的天数，就退出循环
+            if (dayCount > daysInMonth) break;
+
+            calendarHTML += '<tr>';
+
+            // 创建日历单元格
+            for (let j = 0; j < 7; j++) {
+                if (i === 0 && j < firstDay) {
+                    // 当月第一天之前的空白单元格
+                    calendarHTML += '<td></td>';
+                } else if (dayCount > daysInMonth) {
+                    // 当月最后一天之后的空白单元格
+                    calendarHTML += '<td></td>';
+                } else {
+                    // 当前日期高亮显示
+                    if (dayCount === currentDay) {
+                        calendarHTML += `<td style="background-color: #4b70e2; color: white; border-radius: 50%; width: 30px; height: 30px;">${dayCount}</td>`;
+                    } else {
+                        // 周末显示红色
+                        if (j === 0 || j === 6) {
+                            calendarHTML += `<td style="color: #e74c3c;">${dayCount}</td>`;
+                        } else {
+                            calendarHTML += `<td>${dayCount}</td>`;
+                        }
+                    }
+                    dayCount++;
+                }
+            }
+
+            calendarHTML += '</tr>';
+        }
+
+        document.getElementById('calendar-body').innerHTML = calendarHTML;
+    });
+</script>
+{% endblock %}
+
+        {# 书籍列表 #}
+        <div style="overflow: hidden">
+            <div class="bg-white" style="width: 1100px;height: 1350px;margin: 0 auto;margin-top: 15px">
+
+                {# 文字 #}
+                <div style="overflow: hidden">
+                    <h4 style="margin-left: 15px;margin-top: 20px">
+                        <b>书籍列表</b>
+                    </h4>
+                </div>
+
+                {# 列表 #}
+                <div style="overflow: hidden">
+                    <div style="width: 900px;height: 1200px;margin: 0 auto;margin-top: 20px">
+
+                        <div class="row row-cols-1 row-cols-md-3">
+
+                            {% for book in data.items %}
+
+                                <div class="col mb-4">
+                                    <div class="card">
+                                        <img src="{{ url_for('static',filename=book.cover_image_page) }}" style="width:100%;height:300px" class="card-img-top" alt="...">
+                                        <div class="card-body">
+
+                                            <h5 class="card-title">{{ book.title }}</h5>
+
+                                            <p>作者：{{ book.author }}</p>
+
+                                            <p>出版社：{{ book.publisher }}</p>
+
+                                            <p>ISBN：{{ book.isbn }}</p>
+
+                                            <p>标签：
+                                                <a href="/tips/?tip={{ book.tip }}" class="badge badge-info">{{ book.tip }}</a>
+                                            </p>
+
+                                            <a href="/books/?title={{ book.title }}" class="btn btn-primary">查看详情</a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                {# 分页 #}
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center">
+
+                        {% if data.has_prev %}
+                            <li class="page-item">
+                                <a class="page-link" href="/home/?page={{ data.page - 1 }}">上一页</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item">
+                                <a class="page-link" href="#">上一页</a>
+                            </li>
+                        {% endif %} 
+
+                        {% for index in range(data.pages) %}
+                            {% if index + 1 == data.page %}
+                                <li class="page-item active"><a class="page-link" href="/home/?page={{ index + 1 }}">{{ index + 1 }}</a></li>
+                            {% else %}
+                                <li class="page-item"><a class="page-link" href="/home/?page={{ index + 1 }}">{{ index + 1 }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if data.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="/home/?page={{ data.page + 1 }}">下一页</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item">
+                                <a class="page-link" href="#">下一页</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{# 自定义尾部内容 #}
+{% block foot %}
+
+{% endblock %}

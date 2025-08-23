@@ -1,0 +1,153 @@
+{# 书籍详情 #}
+{% extends 'base.html' %}
+
+{% block title %}
+    <title>书籍详情</title>
+{% endblock %}
+
+{# 自定义头部内容 #}
+{% block head %}
+
+    {# 导航条 #}
+    <nav class="navbar navbar-expand-lg  navbar-dark bg-primary">
+
+        <a class="navbar-brand" href="/home/">
+            书籍网站
+        </a>
+
+        {# .navbar-toggler 用于配合我们的折叠插件和其他 导航切换 行为 #}
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/home/">首页<span class="sr-only">(current)</span></a>
+                </li>
+            </ul>
+
+            <li class="nav-item dropdown" style="list-style: none">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false" style="color: white">
+                    筛选
+                </a>
+
+
+                <div class="dropdown-menu">
+                    {% for book in tip %}
+                    <a class="dropdown-item" href="/tips/?tip={{ book.name }}">
+                        {{ book.name }}
+                    </a>
+                {% endfor %}
+                </div>
+            </li>
+
+            <form class="form-inline my-2 my-lg-0 " action="/search/" method="get">
+                    <input class="form-control mr-sm-2" type="search" placeholder="请输入书籍标签" aria-label="Search" name="search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit" style="color: white;border-color:white;">
+                        搜索
+                    </button>
+            </form>
+        </div>
+    </nav>
+
+{% endblock %}
+
+{# 自定义核心内容 #}
+{% block content %}
+
+        <div style="height: 1800px;width: 100%;background-color: #ECECEC;margin: 0 auto">
+
+            {# 书籍详情 #}
+            <div style="overflow: hidden">
+                <div class="bg-white" style="width: 1100px;height: 1600px;margin: 0 auto;margin-top: 15px">
+                    <div style="overflow :hidden">
+                        <div style="width: 900px;height: 1700px;margin: 0 auto;margin-top: 20px">
+
+                            {# 书名 #}
+                            <div class="book_title" style="text-align: center">
+                                <h1 style="font-weight: bold">{{ data.title }}</h1>
+                            </div>
+
+                            <div style="overflow: hidden">
+                                {# 图片＋介绍 #}
+                                <div style="display: flex">
+
+                                    {# 图片 #}
+                                    <div class="cover_img" style="margin-top: 30px">
+                                        <img src="{{ url_for('static',filename=data.cover_image_page) }}" alt="" style="max-width:400px;width: 100%;height: auto">
+                                    </div>
+
+                                    {# 介绍 #}
+                                    <div class="book_info" style="margin-top: 45px;margin-left: 30px">
+
+                                        <div style="margin-bottom: 20px">
+                                            <span style="display: inline-block;font-size: 1.5rem; font-weight: bold" >作 者：</span>
+                                            <h4 style="display: inline-block">{{ data.author }}</h4>
+                                        </div>
+
+                                        <div style="margin-bottom: 20px">
+                                            <span style="display: inline-block;font-size: 1.5rem; font-weight: bold" >出版社：</span>
+                                            <h4 style="display: inline-block">{{ data.publisher }}</h4>
+                                        </div>
+
+                                        <div style="margin-bottom: 20px">
+                                            <span style="display: inline-block;font-size: 1.5rem; font-weight: bold" >ISBN：</span>
+                                            <h4 style="display: inline-block">{{ data.isbn }}</h4>
+                                        </div>
+
+                                        <div style="margin-bottom: 20px">
+                                            <span style="display: inline-block;font-size: 1.5rem; font-weight: bold" >标 签：</span>
+                                            <h4 style="display: inline-block">{{ data.tip }}</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+
+                            {# 内容简介 #}
+                            <h2 style="font-weight: bold">内容简介</h2>
+                            <p style="font-size: 1.3rem;text-indent: 2em;margin-top: 20px">{{ data.info }}</p>
+                            <hr>
+
+                            {# PDF预览 #}
+                            <h2 style="font-weight: bold">书籍预览</h2>
+                            <div class="pdf-preview" style="margin-top: 20px; margin-bottom: 30px;">
+                                <div class="preview-container" style="width: 100%; height: 500px; border: 1px solid #ddd; border-radius: 5px; overflow: hidden;">
+                                    <iframe src="{{ url_for('static', filename=data.pdf_path) }}#toolbar=0&navpanes=0&scrollbar=0"
+                                        style="width: 100%; height: 100%; border: none;"
+                                        title="PDF预览">
+                                    </iframe>
+                                </div>
+                            <div class="preview-controls" style="margin-top: 10px; text-align: center;">
+                                <a href="{{ url_for('static', filename=data.pdf_path) }}" target="_blank" class="btn btn-primary">
+                                    <i class="fa fa-eye"></i> 全屏预览
+                                </a>
+                            </div>
+                            <hr>
+
+                            {# PDF下载 #}
+                            <h2 style="font-weight: bold">书籍下载</h2>
+                            <div style="margin-top: 20px;">
+                                <a href="{{ url_for('static', filename=data.pdf_path) }}" download class="btn btn-success">
+                                    <i class="fa fa-download"></i> PDF下载
+                                </a>
+                                <p style="margin-top: 10px; color: #666; font-size: 0.9rem;">
+                                    文件大小: 约 {{ data.pdf_size|default('未知') }} MB
+                                </p>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{# 自定义尾部内容 #}
+{% block foot %}
+
+{% endblock %}

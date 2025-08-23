@@ -1,0 +1,116 @@
+{# 书籍详情 #}
+{% extends 'base.html' %}
+
+{% block title %}
+    <title>书籍详情</title>
+{% endblock %}
+
+{# 自定义头部内容 #}
+{% block head %}
+
+    {# 导航条 #}
+    <nav class="navbar navbar-expand-lg  navbar-dark bg-primary">
+
+        <a class="navbar-brand" href="/home/">
+            书籍网站
+        </a>
+
+        {# .navbar-toggler 用于配合我们的折叠插件和其他 导航切换 行为 #}
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/home/">首页<span class="sr-only">(current)</span></a>
+                </li>
+            </ul>
+
+            <li class="nav-item dropdown" style="list-style: none">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false" style="color: white">
+                    筛选
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="#">
+                        标签1
+                    </a>
+                    <a class="dropdown-item" href="#">
+                        标签2
+                    </a>
+                    <a class="dropdown-item" href="#">
+                        标签3
+                    </a>
+                </div>
+            </li>
+
+            <form class="form-inline my-2 my-lg-0 ">
+                    <input class="form-control mr-sm-2" type="search" placeholder="请输入书籍标签" aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit" style="color: white;border-color:white;">
+                        搜索
+                    </button>
+            </form>
+        </div>
+    </nav>
+
+{% endblock %}
+
+
+{% block content %}
+    <div style="height: 1600px;width: 100%;background-color: #ECECEC;margin: 0 auto">
+        {# 书籍详情 #}
+        <div style="overflow: hidden">
+            <div class="bg-white" style="width: 1100px;height: 1450px;margin: 0 auto;margin-top: 15px">
+                <div style="overflow: hidden">
+                    <div style="width: 900px;margin: 0 auto;margin-top: 20px">
+
+                        <!-- 书籍标题区域 -->
+                        <div class="book-title" style="text-align: center; margin-bottom: 30px;">
+                            <h2>云南通志</h2>
+                        </div>
+
+                        <div style="overflow: hidden">
+                            <!-- 书籍内容区域：使用弹性布局 -->
+                            <div style="display: flex; align-items: flex-start">
+                                <!-- 左侧画像 -->
+                                <div class="book-cover" style="margin-right: 30px;">
+                                    <img src="https://www.keaitupian.cn/cjpic/frombd/2/253/1659552792/3869332496.jpg"
+                                         style="max-width: 300px; width: 100%; height: auto;"
+                                         alt="云南通志">
+                                </div>
+
+                                <!-- 右侧文本内容 -->
+                                <div class="book-info" style="flex: 1;;margin-top: 0px;">
+                                    <div style="margin-bottom: 15px;">
+                                        <strong>作 者：</strong> 清·鄂尔泰
+                                    </div>
+                                    <div style="margin-bottom: 15px;">
+                                        <strong>出版社：</strong> 无
+                                    </div>
+                                    <div style="margin-bottom: 15px;">
+                                        <strong>丛编项：</strong> 无
+                                    </div>
+                                    <div style="margin-bottom: 15px;">
+                                        <strong>标 签：</strong> 智融
+                                    </div>
+                                    <div style="margin-top: 30px;">
+                                        <h4>内容简介</h4>
+                                        <p style="line-height: 1.8; text-indent: 2em;">
+                                            这里可以添加书籍的详细介绍内容。云南通志是一部重要的地方志书，记载了云南地区的历史、地理、人文等各方面的内容。
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{# 自定义尾部内容 #}
+{% block foot %}
+
+{% endblock %}
+
