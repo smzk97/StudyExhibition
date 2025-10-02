@@ -1,0 +1,8 @@
+.idea/
+__pycache__/
+envs/
+instance/
+migrations/
+venv/
+*.log
+.env
