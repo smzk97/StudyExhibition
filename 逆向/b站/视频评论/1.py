@@ -19,7 +19,7 @@ logger.addHandler(handler)
 
 class Spider:
 
-    def __init__(self,main_oid,csv_path):
+    def __init__(self,main_oid,csv_path,cookie):
         """
         初始化
 
@@ -27,6 +27,8 @@ class Spider:
         :type main_oid : int
         :param csv_path : 要保存的csv文件地址
         :type csv_path : str
+        :param cookie : 防止反爬的cookie值
+        :type cookie : str
         """
         self.url_main = 'https://api.bilibili.com/x/v2/reply/wbi/main'
         self.main_oid = main_oid
@@ -46,6 +48,7 @@ class Spider:
     'sec-fetch-mode': 'cors',
     'sec-fetch-site': 'same-site',
     'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36',
+    'cookie': cookie,
 }
         with open('1.js','r',encoding='utf-8') as f:
             self.js_compile = execjs.compile(f.read())
@@ -99,6 +102,7 @@ class Spider:
             def wrapper(self,param,page):
                 for attempt in range(1,max_retries+1):
                     try:
+                        time.sleep(random.uniform(1.0,3.0))
                         res = func(self,param,page)
                         res.raise_for_status()
                         logger.info(f'第{page}页请求成功')
@@ -188,7 +192,17 @@ class Spider:
         :param page : 页数
         :type page : int
         """
-        for index,r in enumerate(res.json()['data']['replies']):
+        data = res.json().get('data')
+        if not data:
+            logger.warning(f'第{page}页data字段为空，跳过')
+            self._log(f'第{page}页data字段为空，跳过')
+            return
+        replies = data.get('replies')
+        if not replies:
+            logger.info(f'第{page}页无评论，跳过')
+            self._log(f'第{page}页无评论，跳过')
+            return
+        for index,r in enumerate(res.json().get('data').get('replies')):
             data = {
             'user_name': r['member']['uname'],
             'level': r['member']['level_info']['current_level'],
@@ -234,7 +248,6 @@ class Spider:
                             break
                     else:
                         break
-                    time.sleep(random.uniform(1.0,3.0))
 
     def save_to_csv(self,data,page,index):
         """
@@ -259,7 +272,7 @@ class Spider:
         重写run方法
 
         """
-        page = self.done[0] + 1
+        page = int(self.done[0]) + 1
         pagination_str = self.done[1]
         is_end = False
         while not is_end:
@@ -268,20 +281,30 @@ class Spider:
             else:
                 param = self.prepare_request_main_param(page,pagination_str)
             res = self.crawl_comment(param,page)
+            data = res.json().get('data')
+            if not data:
+                logger.warning(f'第{page}页的data字段为空，跳过')
+                self._log(f'第{page}页的data字段为空，跳过')
+                page += 1
+                continue
             if res:
                 self.data_main_deal(res,page)
+                data = res.json().get('data')
                 pagination_str = res.json()['data']['cursor']['pagination_reply'].get('next_offset')
                 is_end = res.json()['data']['cursor']['is_end']
                 page += 1
             else:
                 break
-            time.sleep(random.uniform(1.0, 3.0))
+        if is_end == True:
+            logger.info("全部完成")
+            Spider._log("全部完成")
 
 if __name__ == '__main__':
 
     config = {
-        'main_oid':115579969085266,   # 视频的oid值，可在README.md文件查看更多
-        'csv_path': './1.csv'         # csv文件保存的位置
+        'main_oid':115518363145984,   # 视频的oid值，可在README.md文件查看更多
+        'csv_path': './1.csv',        # csv文件保存的位置
+        'cookie': "buvid3=6AB46122-1114-4AF1-85E4-F05513CF002C94203infoc; b_nut=1761920194; _uuid=A96D8AA8-466B-9D43-EE6A-5B17F597CE31097390infoc; CURRENT_QUALITY=0; buvid_fp=7dc53d52907651242caea95b45648e16; buvid4=F109896E-D277-D4B7-B170-E22348F3794901450-025103122-3s2TtWTpGnrozTZqcWf3JA%3D%3D; rpdid=|(J~lu)YJYkl0J'u~Yumk|k)|; theme-tip-show=SHOWED; theme-avatar-tip-show=SHOWED; home_feed_column=5; browser_resolution=1920-945; DedeUserID=3546580405717300; DedeUserID__ckMd5=443ce1ae9dd8064c; CURRENT_FNVAL=4048; bili_ticket=eyJhbGciOiJIUzI1NiIsImtpZCI6InMwMyIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjQ1MDcyNzIsImlhdCI6MTc2NDI0ODAxMiwicGx0IjotMX0.Kg2SdLmKXPA0CYQdd7CRijZLaXJHFbTvhmfHK0aq9Qc; bili_ticket_expires=1764507212; bp_t_offset_3546580405717300=1140355847637958656; b_lsid=610B107F19_19ACFAE71DE; SESSDATA=9d3986e1%2C1779972912%2Cf23d1%2Ab1CjBPK1YjMb07vBX0RMtQ0Fpvhk7z6hEGewRlvoC8ACy2V6t3r30PReFUWMhOSUN60ZwSVjJkNTVWaVl1SngtNFRaWkZxazhDY1Bzd1NmdnhHTTdYV3R1QllLdW1lY3BEVnVPZV93S3NNc2pwYVlvay03WkR6RVFwOU5nbXRwWkFqVHFWSUtldnhRIIEC; bili_jct=e505ef0c465cdb2592b4cbc758968952; sid=4h62oe0r"
     }
-    start = Spider(config['main_oid'],config['csv_path'])
+    start = Spider(config['main_oid'],config['csv_path'],config['cookie'])
     start.run()
