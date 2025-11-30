@@ -50,7 +50,7 @@ class Spider:
     'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36',
     'cookie': cookie,
 }
-        with open('1.js','r',encoding='utf-8') as f:
+        with open('reverse.js','r',encoding='utf-8') as f:
             self.js_compile = execjs.compile(f.read())
 
     @staticmethod
