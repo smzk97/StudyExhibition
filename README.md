@@ -26,7 +26,7 @@
 
 * [MarkDown学习笔记](./MarkDown学习笔记/MarkDown学习笔记.md) ：学习MarkDown语法的笔记
 * [学生成绩管理系统](./学生成绩管理系统/README.md) ：实训作业，基于c语言的简易学生成绩管理系统，暂只支持命令行页面
-* [Flask-V1]([github.com/smzk97/BookManagement](https://github.com/smzk97/BookManagement)) ：基于Flask+Sqlite+ BootStrap的图书管理系统，功能暂单一
+* [Flask-V1](https://github.com/smzk97/BookManagement) ：基于Flask+Sqlite+ BootStrap的图书管理系统，功能暂单一
 * [逆向](./逆向) ：爬取各大平台数据的成果分享
   * [b站](./逆向/b站)
     * [视频评论](./逆向/b站/视频评论/README.md)
