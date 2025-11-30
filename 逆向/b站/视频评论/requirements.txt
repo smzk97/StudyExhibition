@@ -1,0 +1,3 @@
+pandas==2.3.3
+PyExecJS==1.5.1
+Requests==2.32.5
