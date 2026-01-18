@@ -4,4 +4,7 @@ envs/
 instance/
 migrations/
 *.
-.txt
+*.txt
+*.mp4
+*.mp3
+
