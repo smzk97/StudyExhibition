@@ -3,8 +3,6 @@ __pycache__/
 envs/
 instance/
 migrations/
-*.
-*.txt
 *.mp4
 *.mp3
 *.csv
